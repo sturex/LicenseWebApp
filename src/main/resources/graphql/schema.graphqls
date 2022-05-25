@@ -1,0 +1,91 @@
+scalar UnixTimestamp
+
+type Query {
+    keyPairPage(keyPairFilter: KeyPairFilter, pagination: Pagination): KeyPairPage!
+    licensePage(licenseFilter: LicenseFilter, pagination: Pagination): LicensePage!
+}
+
+type LicensePage {
+    licenses: [License!]!
+    pageInfo: PageInfo!
+}
+
+type KeyPairPage {
+    keyPairs: [KeyPair!]!
+    pageInfo: PageInfo!
+}
+
+type PageInfo {
+    pageSize: Int!
+    pageNumber: Int!
+    totalPages: Int!
+}
+
+input KeyPairFilter {
+    name: String
+    createdBetween: TimestampInterval
+}
+
+input LicenseFilter {
+    name: String
+    createdBetween: TimestampInterval
+}
+
+type Mutation {
+    keyPair (keyPairInput: KeyPairInput!): KeyPair!
+}
+
+input KeyPairInput {
+    name: String!
+}
+
+type KeyPair {
+    name: String!
+    createdAt: UnixTimestamp!
+    publicKey: PublicKey!
+    privateKey: PrivateKey!
+    licenses: [License!]!
+}
+
+type PublicKey {
+    value: String!
+}
+
+type PrivateKey {
+    value: String!
+    license (licenseInput: LicenseInput!): License!
+}
+
+input LicenseInput {
+    name: String!
+    features: [FeatureInput!]!
+    expires: UnixTimestamp!
+}
+
+input FeatureInput {
+    name: String!
+    value: String!
+    type: FeatureType!
+}
+
+enum FeatureType {
+    FLOAT, STRING, INTEGER
+}
+
+input Pagination {
+    pageSize: Int!
+    pageNumber: Int!
+}
+
+input TimestampInterval {
+    begin: UnixTimestamp!
+    end: UnixTimestamp!
+}
+
+type License {
+    body: String!
+    signature: String!
+    name: String!
+    createdAt: UnixTimestamp!
+    keyPair: KeyPair!
+}

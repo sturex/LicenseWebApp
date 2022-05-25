@@ -1,0 +1,26 @@
+spring:
+
+  graphql:
+    graphiql:
+      enabled: true
+    schema:
+      printer:
+        enabled: true
+
+  datasource:
+    url: url
+    username: user
+    password: password
+
+  liquibase:
+    contexts: ${spring.profiles.active}
+  #    liquibase-schema: public
+
+  profiles:
+    active: local
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
